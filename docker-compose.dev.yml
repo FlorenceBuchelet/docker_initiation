@@ -1,0 +1,34 @@
+services:
+  server:
+    build: ./server
+    ports: 
+      - 5050:5000
+    command: npm run dev
+    volumes: 
+      - ./server/src/:/app/src/
+
+  mongodb:
+    image: mongo
+    volumes:
+      - ./data:/data/db
+
+  client:
+    build: ./client
+    ports:
+      - 8080:3000
+    volumes:
+      - ./client/src/:/app/src
+    # sparadrap pour faire fonctionner le hot reload
+    environment:
+    # le serveur doit se connecter sur localhost
+      - WDS_SOCKET=127.0.0.1
+    # active la lib chokidar pour surveiller les changements
+      - CHOKIDAR_USEPOLLING=true
+    # active également la surveillance de changements pour watchpack
+      - WATCHPACK_POLLING=true
+    # "polling" = pollinisation
+
+
+#    Initialise et un nouveau dépôt Github à la racine du projet et commit
+#    Pousse ce dossier sur un dépôt Github
+#    Poste le lien de ce dépôt en solution.
